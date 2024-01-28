@@ -5,7 +5,7 @@ from torchvision import transforms
 import torch.nn as nn
 
 class SIDDDataset(Dataset):
-    def __init__(self, root_dir, patch_size):
+    def __init__(self, root_dir, patch_size, train=True, train_ratio=0.75):
         super().__init__()
 
         self.root_dir = root_dir
@@ -21,6 +21,17 @@ class SIDDDataset(Dataset):
                     self.ground_truth_image_paths.append(os.path.join(root_dir, folder, img))
                 if img.startswith("N"):
                     self.noisy_image_paths.append(os.path.join(root_dir, folder, img))
+
+        total_samples = len(self.noisy_image_paths)
+        train_size = int(train_ratio * total_samples)
+        val_size = total_samples - train_size
+
+        if train:
+            self.noisy_image_paths, self.ground_truth_image_paths = self.noisy_image_paths[
+                                                              :train_size], self.ground_truth_image_paths[:train_size]
+        else:
+            self.noisy_image_paths, self.ground_truth_image_paths = self.noisy_image_paths[
+                                                              -val_size:], self.ground_truth_image_paths[-val_size:]
 
     def __len__(self):
         return len(self.noisy_image_paths)
