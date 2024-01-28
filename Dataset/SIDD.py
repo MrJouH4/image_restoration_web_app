@@ -17,10 +17,9 @@ class SIDDDataset(Dataset):
         for folder in os.listdir(root_dir):
             folder_path = os.path.join(root_dir, folder)
             for img in os.listdir(folder_path):
-                img_parts = img.split("_")
-                if img_parts[1].startswith("G"):
+                if img.startswith("G"):
                     self.ground_truth_image_paths.append(os.path.join(root_dir, folder, img))
-                if img_parts[1].startswith("N"):
+                if img.startswith("N"):
                     self.noisy_image_paths.append(os.path.join(root_dir, folder, img))
 
     def __len__(self):
