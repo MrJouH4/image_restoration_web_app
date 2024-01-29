@@ -8,7 +8,7 @@ import torch.nn as nn
 
 
 class Div2kDataset(Dataset):
-    def __init__(self, div2k_path, noise_levels, patch_size=None):
+    def __init__(self, div2k_path, noise_levels, patch_size=None, train=True, train_ratio=0.75):
         self.image_list = []
         self.noise_levels = noise_levels
         self.patch_size = patch_size
@@ -18,6 +18,15 @@ class Div2kDataset(Dataset):
 
         for i in os.listdir(div2k_path):
             self.image_list.append(os.path.join(div2k_path, i))
+
+        total_samples = len(self.image_list)
+        train_size = int(train_ratio * total_samples)
+        val_size = total_samples - train_size
+
+        if train:
+            self.image_list = self.image_list[:train_size]
+        else:
+            self.image_list = self.image_list[-val_size:]
 
     def __len__(self):
         return len(self.image_list)
