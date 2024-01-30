@@ -1,10 +1,10 @@
 import pandas as pd
 
 
-def add_to_excelsheet(excel_file_path, epoch_number, epoch_loss, lr):
+def add_to_excelsheet(excel_file_path, epoch_number, sidd_epoch_loss, div2k_epoch_loss, lr):
     excel_file_path = excel_file_path
     learning_rate = lr
-
+    epoch_loss = (sidd_epoch_loss + div2k_epoch_loss) / 2
     data = {'Epoch': [epoch_number], 'Loss': [epoch_loss], 'Learning Rate': [learning_rate]}
     df = pd.DataFrame(data)
 
