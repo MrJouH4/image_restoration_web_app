@@ -95,11 +95,6 @@ class NAFBlock(nn.Module):
                                groups=1, bias=True)
 
         self.mdta = Attention(c, 8, True)
-        self.sca = nn.Sequential(
-            nn.AdaptiveAvgPool2d(1),
-            nn.Conv2d(in_channels=dw_channel // 2, out_channels=dw_channel // 2, kernel_size=1, padding=0, stride=1,
-                      groups=1, bias=True),
-        )
 
         self.sg = SimpleGate()
 
@@ -128,7 +123,6 @@ class NAFBlock(nn.Module):
         x = self.conv2(x)
         x = self.sg(x)
         x = x * self.mdta(x)
-        # x = x * self.sca(x)
         x = self.conv3(x)
 
         x = self.dropout1(x)
