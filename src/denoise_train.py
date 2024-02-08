@@ -1,4 +1,3 @@
-import torch
 from Utils.addToExcelsheet import add_to_excelsheet
 import random
 import torch
