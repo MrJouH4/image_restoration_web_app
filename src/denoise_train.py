@@ -27,7 +27,6 @@ def train(sidd_dataloader_train, div2k_dataloader_train, folder, checkpoint_path
     device = torch.device(device)
     epoch = int(checkpoint_path.split("/")[-1].split("_")[-1][:-4])
     print(epoch)
-    i = 0
     num_epochs = epoch + 2
     with open(progress_file, "w") as file:
         for epoch in range(epoch + 1, num_epochs):
