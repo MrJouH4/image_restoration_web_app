@@ -2,7 +2,7 @@ from image_restoration_web_app.Utils.addToExcelsheet import add_to_excelsheet
 import random
 import torch
 import torch.nn as nn
-from Archs.NafnetArch import NAFNet
+from image_restoration_web_app.Archs.NafnetArch import NAFNet
 
 
 def train(sidd_dataloader_train, div2k_dataloader_train, folder, checkpoint_path,
