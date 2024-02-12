@@ -1,4 +1,4 @@
-from Utils.addToExcelsheet import add_to_excelsheet
+from image_restoration_web_app.Utils.addToExcelsheet import add_to_excelsheet
 import random
 import torch
 import torch.nn as nn
