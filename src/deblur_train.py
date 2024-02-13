@@ -1,8 +1,7 @@
-import torch
-from Utils.addToExcelsheet import add_to_excelsheet
+from image_restoration_web_app.Utils.addToExcelsheet import add_to_excelsheet
 import torch
 import torch.nn as nn
-from Archs.NafnetArch import NAFNet
+from image_restoration_web_app.Archs.NafnetArch import NAFNet
 
 def train(gopro_dataloader_train, folder, checkpoint_path, excel_file, progress_file, device="cuda", lr=0.0001):
     device = torch.device(device)
