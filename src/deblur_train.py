@@ -61,6 +61,6 @@ def train(gopro_dataloader_train, folder, checkpoint_path, excel_file, progress_
             Epoch_loss = sum(batch_loss) / len(batch_loss)
             progress_str = f"Epoch [{epoch}], Epoch Loss: {Epoch_loss}"
             print(progress_str)
-            add_to_excelsheet(excel_file,epoch,0, Epoch_loss,lr)
+            add_to_excelsheet(excel_file,epoch, Epoch_loss, Epoch_loss,lr)
             file.write(progress_str + "\n")
     file.close()
