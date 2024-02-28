@@ -50,7 +50,7 @@ def train(gopro_dataloader_train, div2kblur_dataloader_train, folder, checkpoint
                     gt_image = div2kblur_gt_images[:, patch_index].to(device)
                     optimizer.zero_grad()
                     outputs = model(div2kblur_noisy_images)
-                    loss = criterion(outputs, div2kblur_gt_image)
+                    loss = criterion(outputs, div2kblur_gt_images)
                     loss.backward()
                     optimizer.step()
                     div2kblur_batch_loss.append(loss.item())
