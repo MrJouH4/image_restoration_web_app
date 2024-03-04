@@ -32,10 +32,9 @@ def train(gopro_dataloader_train, div2kblur_dataloader_train, folder, checkpoint
             batch_loss = []
             for batch_no, ((gopro_noisy_images, gopro_gt_images), (div2kblur_noisy_images, div2kblur_gt_images)) in enumerate (
                     zip(gopro_dataloader_train, div2kblur_dataloader_train)):
-                patches_loss = []
-                gopro_batch_loss =[]
-                div2kblur_batch_loss = []
-                for patch_index in range(div2kblur_noisy_images[0].size(0)):
+                gopro_patches_loss = []
+                div2kblur_patches_loss = []
+                for patch_index in range(gopro_noisy_images[0].size(0)):
                     ## gorpro
                     gopro_noisy_image = gopro_noisy_images[:, patch_index].to(device)
                     gopro_gt_image = gopro_gt_images[:, patch_index].to(device)
@@ -44,24 +43,24 @@ def train(gopro_dataloader_train, div2kblur_dataloader_train, folder, checkpoint
                     loss = criterion(outputs, gopro_gt_image)
                     loss.backward()
                     optimizer.step()
-                    gopro_batch_loss.append(loss.item())
+                    gopro_patches_loss.append(loss.item())
                     ## Div2kblur
-                    div2kblur_noisy_image = div2kblur_noisy_images[:, patch_index].to(device)
-                    gt_image = div2kblur_gt_images[:, patch_index].to(device)
+                    div2kblur_noisy_images = div2kblur_noisy_images[:, patch_index].to(device)
+                    div2kblur_gt_images = div2kblur_gt_images[:, patch_index].to(device)
                     optimizer.zero_grad()
                     outputs = model(div2kblur_noisy_images)
                     loss = criterion(outputs, div2kblur_gt_images)
                     loss.backward()
                     optimizer.step()
-                    div2kblur_batch_loss.append(loss.item())
+                    div2kblur_patches_loss.append(loss.item())
                     
                     progress_str = f"Epoch [{epoch}], Step [{batch_no + 1}/{len(gopro_dataloader_train)}], Patch [{patch_index + 1}/{min(gopro_noisy_images[0].size(0), div2kblur_noisy_images[0].size(0))}], GoPro Loss: {gopro_loss.item()}, DIV2KBlur Loss: {div2kblur_loss.item()}"
                     print(progress_str)
                     file.write(progress_str + "\n")
 
-                gopro_batch_loss = sum(gopro_patches_loss) / len(gopro_patches_loss)
-                div2kblur_batch_loss = sum(div2kblur_patches_loss) / len(div2kblur_patches_loss)
-                batch_loss.append(sum(patches_loss) / len(patches_loss))
+                # gopro_batch_loss = sum(gopro_patches_loss) / len(gopro_patches_loss)
+                # div2kblur_batch_loss = sum(div2kblur_patches_loss) / len(div2kblur_patches_loss)
+                # batch_loss.append((gopro_batch_loss, div2kblur_batch_loss))
             i += 1
             if i % 200 == 0 and i != 0:
                     torch.save({
