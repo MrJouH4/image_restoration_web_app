@@ -40,21 +40,21 @@ def train(gopro_dataloader_train, div2kblur_dataloader_train, folder, checkpoint
                     gopro_gt_image = gopro_gt_images[:, patch_index].to(device)
                     optimizer.zero_grad()
                     outputs = model(gopro_noisy_image)
-                    loss = criterion(outputs, gopro_gt_image)
-                    loss.backward()
+                    gopro_loss = criterion(outputs, gopro_gt_image)
+                    gopro_loss.backward()
                     optimizer.step()
-                    gopro_patches_loss.append(loss.item())
+                    gopro_patches_loss.append(gopro_loss.item())
                     ## Div2kblur
                     div2kblur_noisy_images = div2kblur_noisy_images[:, patch_index].to(device)
                     div2kblur_gt_images = div2kblur_gt_images[:, patch_index].to(device)
                     optimizer.zero_grad()
                     outputs = model(div2kblur_noisy_images)
-                    loss = criterion(outputs, div2kblur_gt_images)
-                    loss.backward()
+                    div2kblur_loss = criterion(outputs, div2kblur_gt_images)
+                    div2kblur_loss.backward()
                     optimizer.step()
-                    div2kblur_patches_loss.append(loss.item())
+                    div2kblur_patches_loss.append(div2kblur_loss.item())
                     
-                    progress_str = f"Epoch [{epoch}], Step [{batch_no + 1}/{len(gopro_dataloader_train)}], Patch [{patch_index + 1}/{min(gopro_noisy_images[0].size(0), div2kblur_noisy_images[0].size(0))}], GoPro Loss: {gopro_patches_loss.item()}, DIV2KBlur Loss: {div2kblur_patches_loss.item()}"
+                    progress_str = f"Epoch [{epoch}], Step [{batch_no + 1}/{len(gopro_dataloader_train)}], Patch [{patch_index + 1}/{min(gopro_noisy_images[0].size(0), div2kblur_noisy_images[0].size(0))}], GoPro Loss: {gopro_loss.item()}, DIV2KBlur Loss: {div2kblur_loss.item()}"
                     print(progress_str)
                     file.write(progress_str + "\n")
 
