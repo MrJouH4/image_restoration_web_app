@@ -54,20 +54,22 @@ def train(gopro_dataloader_train, div2kblur_dataloader_train, folder, checkpoint
                     optimizer.step()
                     div2kblur_patches_loss.append(div2kblur_loss.item())
                     
-                    progress_str = f"Epoch [{epoch}], Step [{batch_no + 1}/{len(gopro_dataloader_train)}], Patch [{patch_index + 1}/{min(gopro_noisy_images[0].size(0), div2kblur_noisy_images[0].size(0))}], GoPro Loss: {gopro_loss.item()}, DIV2KBlur Loss: {div2kblur_loss.item()}"
+                    progress_str = f"Epoch [{epoch}], Step [{batch_no + 1}/{len(gopro_dataloader_train)}], Patch [{patch_index + 1}/{min(gopro_blurry_images[0].size(0), div2k_blurry_images[0].size(0))}], GoPro Loss: {gopro_loss.item()}, DIV2KBlur Loss: {div2kblur_loss.item()}"
                     print(progress_str)
                     file.write(progress_str + "\n")
 
-                # gopro_batch_loss = sum(gopro_patches_loss) / len(gopro_patches_loss)
-                # div2kblur_batch_loss = sum(div2kblur_patches_loss) / len(div2kblur_patches_loss)
-                # batch_loss.append((gopro_batch_loss, div2kblur_batch_loss))
+                gopro_batch_loss = sum(gopro_patches_loss) / len(gopro_patches_loss)
+                div2k_batch_loss = sum(div2kblur_patches_loss) / len(div2kblur_patches_loss)
+                batch_loss.append((gopro_batch_loss, div2k_batch_loss))
             i += 1
             if i % 200 == 0 and i != 0:
                     torch.save({
                             'model_state_dict': model.state_dict(),
                             'optimizer_state_dict': optimizer.state_dict(),
                         }, f"{folder}/GoPro_epoch_{epoch}.pth")
-                    progress_str = f"Epoch [{epoch}], Epoch Loss: {sum(batch_loss) / len(batch_loss)}"
+                    gopro_epoch_loss = sum([s[0] for s in batch_loss]) / len(batch_loss)
+                    div2k_epoch_loss = sum([s[1] for s in batch_loss]) / len(batch_loss)
+                    progress_str = f"Epoch [{epoch}], GoPro Epoch Loss: {gopro_epoch_loss}, Div2k Epoch Loss: {div2k_epoch_loss}"
                     print(progress_str)
                     file.write(progress_str + "\n")
             torch.save({
@@ -75,10 +77,9 @@ def train(gopro_dataloader_train, div2kblur_dataloader_train, folder, checkpoint
                     'optimizer_state_dict': optimizer.state_dict(),
                 }, f"{folder}/GoPro_epoch_{epoch}.pth")
             gopro_epoch_loss = sum([s[0] for s in batch_loss]) / len(batch_loss)
-            div2kblur_epoch_loss = sum([s[1] for s in batch_loss]) / len(batch_loss)
-            # Epoch_loss = sum(batch_loss) / len(batch_loss)
-            progress_str = f"Epoch [{epoch}],GoPro Epoch Loss: {gopro_epoch_loss}, DIV2KBlur Epoch Loss: {div2kblur_epoch_loss}"
+            div2k_epoch_loss = sum([s[1] for s in batch_loss]) / len(batch_loss)
+            progress_str = f"Epoch [{epoch}], GoPro Epoch Loss: {gopro_epoch_loss}, Div2k Epoch Loss: {div2k_epoch_loss}"
             print(progress_str)
-            add_to_excelsheet(excel_file,epoch, gopro_epoch_loss, div2kblur_epoch_loss,lr)
+            add_to_excelsheet(excel_file,epoch, gopro_epoch_loss, div2k_epoch_loss, lr)
             file.write(progress_str + "\n")
     file.close()
