@@ -4,8 +4,8 @@ import matplotlib.pyplot as plt
 
 def display_image(dataset):
     random_img = random.randint(0, len(dataset) - 1)
-    random_patch = random.randint(0, len(dataset[0][0]) - 1)
     sample = dataset[random_img]
+    random_patch = random.randint(0, len(sample[0]) - 1)
     noise_image = sample[0][random_patch]
     hr_image = sample[1][random_patch]
 
