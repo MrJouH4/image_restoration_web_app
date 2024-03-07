@@ -30,26 +30,26 @@ def train(gopro_dataloader_train, div2kblur_dataloader_train, folder, checkpoint
         for epoch in range(epoch + 1, num_epochs):
             i = 0
             batch_loss = []
-            for batch_no, ((gopro_noisy_images, gopro_gt_images), (div2kblur_noisy_images, div2kblur_gt_images)) in enumerate(
+            for batch_no, ((gopro_blurry_images, gopro_gt_images), (div2k_blurry_images, div2k_gt_images)) in enumerate(
                     zip(gopro_dataloader_train, div2kblur_dataloader_train)):
                 gopro_patches_loss = []
                 div2kblur_patches_loss = []
-                for patch_index in range(gopro_noisy_images[0].size(0)):
+                for patch_index in range(gopro_blurry_images[0].size(0)):
                     ## gorpro
-                    gopro_noisy_image = gopro_noisy_images[:, patch_index].to(device)
+                    gopro_blurry_image = gopro_blurry_images[:, patch_index].to(device)
                     gopro_gt_image = gopro_gt_images[:, patch_index].to(device)
                     optimizer.zero_grad()
-                    outputs = model(gopro_noisy_image)
+                    outputs = model(gopro_blurry_image)
                     gopro_loss = criterion(outputs, gopro_gt_image)
                     gopro_loss.backward()
                     optimizer.step()
                     gopro_patches_loss.append(gopro_loss.item())
                     ## Div2kblur
-                    div2kblur_noisy_images = div2kblur_noisy_images[:, patch_index].to(device)
-                    div2kblur_gt_images = div2kblur_gt_images[:, patch_index].to(device)
+                    div2k_blurry_image = div2k_blurry_images[:, patch_index].to(device)
+                    div2k_gt_image = div2k_gt_images[:, patch_index].to(device)
                     optimizer.zero_grad()
-                    outputs = model(div2kblur_noisy_images)
-                    div2kblur_loss = criterion(outputs, div2kblur_gt_images)
+                    outputs = model(div2k_blurry_image)
+                    div2kblur_loss = criterion(outputs, div2k_gt_image)
                     div2kblur_loss.backward()
                     optimizer.step()
                     div2kblur_patches_loss.append(div2kblur_loss.item())
