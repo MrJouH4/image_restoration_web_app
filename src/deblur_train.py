@@ -31,7 +31,7 @@ def train(gopro_dataloader_train, div2kblur_dataloader_train, folder, checkpoint
             i = 0
             batch_loss = []
             for batch_no, ((gopro_noisy_images, gopro_gt_images), (div2kblur_noisy_images, div2kblur_gt_images)) in enumerate(
-                    zip(div2kblur_dataloader_train, gopro_dataloader_train)):
+                    zip(gopro_dataloader_train, div2kblur_dataloader_train)):
                 gopro_patches_loss = []
                 div2kblur_patches_loss = []
                 for patch_index in range(gopro_noisy_images[0].size(0)):
