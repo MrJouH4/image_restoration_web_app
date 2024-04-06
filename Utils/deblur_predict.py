@@ -36,6 +36,9 @@ def predict(input_image_path, checkpoint_path):
     with torch.no_grad():
         output_chunk = predict_model(torch.unsqueeze(noisy_image, 0))
     
-   
+    image_np1 = noisy_image.permute(1, 2, 0).cpu().numpy()
+    image_np2 = output_chunk[0].permute(1, 2, 0).cpu().numpy()
+
+    return image_np1,image_np2
    
 
