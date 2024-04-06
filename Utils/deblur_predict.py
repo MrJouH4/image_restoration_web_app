@@ -6,7 +6,7 @@ import matplotlib.pyplot as plt
 from image_restoration_web_app.Archs.NafnetArch import NAFNet 
 
 def predict(input_image_path):
-   checkpoint_path = "/content/drive/MyDrive/Training_model/GoPro_epoch_58.pth"
+    checkpoint_path = "/content/drive/MyDrive/Training_model/GoPro_epoch_58.pth"
 
     img_channel = 3
     width = 32
