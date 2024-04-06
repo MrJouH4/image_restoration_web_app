@@ -41,5 +41,5 @@ def predict(input_image_path):
     image_np2 = output_chunk[0].permute(1, 2, 0).cpu().numpy()
 
     
-   return image_np1, image_np2
+    return image_np1, image_np2
 
