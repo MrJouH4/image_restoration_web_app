@@ -36,6 +36,7 @@ class Div2kBlurDataset(Dataset):
         num_patches = patches.shape[-1]
         patches = patches.view(3, self.patch_size, self.patch_size, num_patches)
         patches = patches.permute(3, 0, 1, 2)
+        unfold = nn.Unfold(kernel_size=self.patch_size, stride=self.patch_size)
         return patches
 
     def __getitem__(self, idx):
