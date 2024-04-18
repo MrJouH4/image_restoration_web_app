@@ -2,11 +2,11 @@ import torch
 from torchvision import transforms
 from PIL import Image
 import matplotlib.pyplot as plt
+from Archs.NafnetArch import NAFNet
 
-from image_restoration_web_app.Archs.NafnetArch import NAFNet 
 
 def predict(input_image_path):
-    checkpoint_path = "/content/drive/MyDrive/Training_model/GoPro_epoch_58.pth"
+    checkpoint_path = "../checkpoints/GoPro_epoch_58.pth"
 
     img_channel = 3
     width = 32
@@ -27,7 +27,6 @@ def predict(input_image_path):
     
     noisy_image = Image.open(input_image_path)
     transform = transforms.Compose([
-        transforms.Resize((512, 512)),  # Resize to 512x512
         transforms.ToTensor(),
     ])
   
@@ -43,3 +42,17 @@ def predict(input_image_path):
     
     return image_np1, image_np2
 
+
+if __name__ == "__main__":
+    blurry, tested = predict("C:/Users/Jou/Desktop/blurry.png")
+
+    fig, axes = plt.subplots(1, 2)
+
+    axes[0].imshow(blurry)
+    axes[0].set_title("blurry Image")
+    axes[0].axis('off')
+
+    axes[1].imshow(tested)
+    axes[1].set_title("Tested Image")
+    axes[1].axis('off')
+    plt.show()
