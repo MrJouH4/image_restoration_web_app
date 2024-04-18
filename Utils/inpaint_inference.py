@@ -1,5 +1,6 @@
+import os.path
 from subprocess import Popen, PIPE
-
+from PIL import Image
 
 def run_inference(image_path, output_folder, gpu=-1, with_scratch=True):
     command = [
@@ -18,7 +19,14 @@ def run_inference(image_path, output_folder, gpu=-1, with_scratch=True):
         print("Error running inference:")
         print(stderr.decode())
     else:
+        final_output = os.path.join(output_folder, "final_output")
+        files = os.listdir(final_output)
+        image_files = [f for f in files if os.path.isfile(os.path.join(final_output, f)) and f.lower().endswith(
+            ('.png', '.jpg', '.jpeg', '.gif', '.bmp'))]
+        image_path = os.path.join(final_output, image_files[0])
+        inpainted_image = Image.open(image_path)
         print("Inference completed successfully.")
+        return inpainted_image
 
 
 
