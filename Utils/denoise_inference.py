@@ -38,11 +38,13 @@ def predict(input_image_path):
 
     image_np1 = noisy_image.permute(1, 2, 0).cpu().numpy()
     image_np2 = output_chunk[0].permute(1, 2, 0).cpu().numpy()
+    image_np2 = (image_np2 - image_np2.min()) / (image_np2.max() - image_np2.min())
     return image_np1, image_np2
 
 
 if __name__ == "__main__":
-    noisy, tested = predict("C:/Users/Jou/Desktop/drake.jpg")
+    noisy, tested = predict("C:/Users/Jou/Desktop/fcai.png")
+    # noisy, tested = predict("../database/old.png")
 
     fig, axes = plt.subplots(1, 2)
 
